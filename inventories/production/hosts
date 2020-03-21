@@ -1,0 +1,14 @@
+web_server_1 ansible_ssh_host=vps0253.00gate.com ansible_user=manager
+
+[webservers]
+web_server_1
+
+[production]
+web_server_1
+
+[function:children]
+webservers
+environments
+
+[environments:children]
+production
