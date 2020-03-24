@@ -35,7 +35,7 @@
     - name: Deploy laravel | clone repository
       git:
         repo: "https://{{ git_repo_user | urlencode }}:{{ git_repo_password | urlencode }}@{{ git_repo_url }}"
-        dest: "{{ path }}/laravel/versions/app-{{ release_version_to_deploy }}"
+        dest: "{{ path }}/laravel/versions/app-{{ release_version_to_deploy }}/app"
         version: "tags/{{ release_version_to_deploy }}"
         recursive: yes
       become_user: "{{ apache_user }}"
@@ -43,7 +43,7 @@
         - deploy_laravel_git
     - name: Check permissions
       file:
-        path: "{{ path }}/laravel/versions/app-{{ release_version_to_deploy }}"
+        path: "{{ path }}/laravel/versions/app-{{ release_version_to_deploy }}/app"
         state: directory
         mode: "0755"
         owner: "{{ apache_user }}"
@@ -51,7 +51,7 @@
     - name: Copy file .env owner and permissions
       copy:
         src: "{{ env }}"
-        dest: "{{ path }}/laravel/versions/app-{{ release_version_to_deploy }}/.env"
+        dest: "{{ path }}/laravel/versions/app-{{ release_version_to_deploy }}/app/.env"
         owner: "{{ apache_user }}"
         group: "{{ apache_group }}"
         mode: "0644"
@@ -59,10 +59,10 @@
     - name: composer install dependencies
       composer:
         command: install
-        working_dir: "{{ path }}/laravel/versions/app-{{ release_version_to_deploy }}"
+        working_dir: "{{ path }}/laravel/versions/app-{{ release_version_to_deploy }}/app"
     - name: Create current symlink
       file:
-        src: "{{ path }}/laravel/versions/app-{{ release_version_to_deploy }}"
+        src: "{{ path }}/laravel/versions/app-{{ release_version_to_deploy }}/app"
         dest: "{{ path }}/laravel/versions/current"
         state: link
 
