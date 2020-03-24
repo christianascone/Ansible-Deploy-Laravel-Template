@@ -35,7 +35,7 @@
     - name: Deploy laravel | clone repository
       git:
         repo: "https://{{ git_repo_user | urlencode }}:{{ git_repo_password | urlencode }}@{{ git_repo_url }}"
-        dest: "{{ path }}/laravel/versions/app-{{ release_version_to_deploy }}/app"
+        dest: "{{ path }}/laravel/versions/app-{{ release_version_to_deploy }}"
         version: "tags/{{ release_version_to_deploy }}"
         recursive: yes
       become_user: "{{ apache_user }}"
