@@ -7,15 +7,8 @@
 
   vars_prompt:
     - name: "release_version_to_deploy"
-      prompt: "Release version to deploy"
-      default: "0.1.0"
+      prompt: "Release version to deploy (input tag)"
       private: no
-    - name: "github_user"
-      prompt: "Github username"
-      default: "username"
-    - name: "github_password"
-      prompt: "Github password"
-      default: "secret"
 
   pre_tasks:
     - name: deploy_app
@@ -34,26 +27,31 @@
         update_cache: yes
     - name: Create a directory versions
       file:
-        path: "/home/ubuntu/versions/"
+        path: "{{ path }}/laravel/versions/"
         state: directory
         mode: "0755"
         owner: "{{ apache_user }}"
         group: "{{ apache_group }}"
-    - name: Deploy enabu | clone repository
+    - name: Deploy laravel | clone repository
       git:
-        # repo: "https://{{ github_user | urlencode }}:{{ github_password }}@github.com/ilbonzo/DevOps-culture-demo.git"
-        repo: "https://github.com/ilbonzo/DevOps-culture-demo.git"
-        dest: "/home/ubuntu/versions/app-{{ release_version_to_deploy }}"
+        repo: "https://{{ git_repo_user | urlencode }}:{{ git_repo_password | urlencode }}@{{ git_repo_url }}"
+        dest: "{{ path }}/laravel/versions/app-{{ release_version_to_deploy }}"
         version: "tags/{{ release_version_to_deploy }}"
         recursive: yes
-      ignore_errors: yes
       become_user: "{{ apache_user }}"
       tags:
-        - deploy_enabu_git
+        - deploy_laravel_git
+    - name: Check permissions
+      file:
+        path: "{{ path }}/laravel/versions/app-{{ release_version_to_deploy }}"
+        state: directory
+        mode: "0755"
+        owner: "{{ apache_user }}"
+        group: "{{ apache_group }}"
     - name: Copy file .env owner and permissions
       copy:
-        src: ../app/.env
-        dest: "/home/ubuntu/versions/app-{{ release_version_to_deploy }}/app/.env"
+        src: "{{ env }}"
+        dest: "{{ path }}/laravel/versions/app-{{ release_version_to_deploy }}/.env"
         owner: "{{ apache_user }}"
         group: "{{ apache_group }}"
         mode: "0644"
@@ -61,23 +59,12 @@
     - name: composer install dependencies
       composer:
         command: install
-        working_dir: "/home/ubuntu/versions/app-{{ release_version_to_deploy }}/app"
+        working_dir: "{{ path }}/laravel/versions/app-{{ release_version_to_deploy }}"
     - name: Create current symlink
       file:
-        src: "/home/ubuntu/versions/app-{{ release_version_to_deploy }}"
-        dest: "/home/ubuntu/versions/current"
+        src: "{{ path }}/laravel/versions/app-{{ release_version_to_deploy }}"
+        dest: "{{ path }}/laravel/versions/current"
         state: link
-    - name: remove html link or dir
-      file:
-        path: "/var/www/html"
-        state: absent
-    - name: Create symlink html
-      file:
-        src: "/home/ubuntu/versions/current/app/public"
-        dest: "/var/www/html"
-        state: link
-
-
 
   post_tasks:
     - name: deploy_app
