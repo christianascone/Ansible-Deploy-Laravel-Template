@@ -1,0 +1,2 @@
+path: /var/www/testing
+env: ../app/.env.testing

@@ -1,0 +1,3 @@
+git_repo_user: user@mail.com
+git_repo_password: pass
+git_repo_url: github.com/user/repo.git

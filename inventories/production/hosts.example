@@ -1,0 +1,4 @@
+web_server_1 ansible_ssh_host=machine.host.com ansible_user=ubuntu ansible_port=22
+
+[webservers]
+web_server_1
