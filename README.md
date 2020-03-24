@@ -31,23 +31,56 @@ Then:
 
 ---
 
-### **Installation**
+### **Configuration**
 
-In order to install the project and all dependencies, enter in the project folder and run `npm install`
+In order to install the project you must clone this repo one level above your laravel app.
+
+For example:
+```
+|
++-- Ansible-Deploy-Laravel/
+|
++-- app/
+|  +-- app/
+|  +-- public/
+|  +-- .env
+```
+
+Then go inside the `Ansible-Deploy-Laravel` directory and run the setup script:
+```sh
+./setup.sh
+```
+This will just copy example files as real configuration files.
+
+Now you can edit them with your setup:
+```
+|
++-- group_vars/
+|  +-- all.yml  <--
+|
++-- inventories/
+|  +-- testing/
+|  |  +-- hosts  <--
+|  |  +-- group_vars/
+|  |  |  +-- all.yml  <--
+|  +-- production/
+|  |  +-- hosts  <--
+|  |  +-- group_vars/
+|  |  |  +-- all.yml  <--
+```
+
+
+Place your `.env` files in path you set in `all.yml`.
 
 ---
 
 ### Start the project
 
+Go inside the `Ansible-Deploy-Laravel` directory and run:
 ```bash
-npm start
+ansible-playbook -i inventories/environment/hosts deploy_app.yml -K
 ```
-
-### Test the project
-
-```bash
-npm test
-```
+Where `environment` is `testing` or `production`.
 
 ---
 
@@ -76,6 +109,12 @@ Feel free to open issues or submit pull-requests to help me improving my work.
 
 * 1.0.0
     * First working release
+
+---
+
+### **:notebook: TODO**
+
+* Storage directory link
 
 ---
 
