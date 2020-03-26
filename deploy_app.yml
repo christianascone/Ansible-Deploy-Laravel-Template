@@ -57,6 +57,7 @@
         mode: "0644"
 
     - name: composer install dependencies
+      become_user: "{{ apache_user }}"
       composer:
         command: install
         working_dir: "{{ path }}/laravel/versions/app-{{ release_version_to_deploy }}/app"
@@ -64,6 +65,24 @@
       file:
         src: "{{ path }}/laravel/versions/app-{{ release_version_to_deploy }}/app"
         dest: "{{ path }}/laravel/versions/current"
+        state: link
+    - name: Check storage directory
+      become_user: "{{ apache_user }}"
+      file:
+        path: "{{ path }}/laravel/storage/"
+        state: directory
+        mode: "0755"
+        owner: "{{ apache_user }}"
+        group: "{{ apache_group }}"
+    - name: Delete storage directory
+      file:
+        path: "{{ path }}/laravel/versions/current/storage"
+        state: absent
+    - name: Create storage symlink
+      become_user: "{{ apache_user }}"
+      file:
+        src: "{{ path }}/laravel/storage"
+        dest: "{{ path }}/laravel/versions/current/storage"
         state: link
 
   post_tasks:
