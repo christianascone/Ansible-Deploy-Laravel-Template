@@ -1,6 +1,6 @@
 # **:triangular_flag_on_post: ANSIBLE-DEPLOY-LARAVEL-TEMPLATE**
 
-![project version](https://img.shields.io/badge/project-1.0.0-brightgreen.svg)
+![project version](https://img.shields.io/badge/project-1.1.0-brightgreen.svg)
 ![python version](https://img.shields.io/badge/python->=2-brightgreen.svg)
 ![ansible version](https://img.shields.io/badge/ansible->=2.9.x-brightgreen.svg)
 
@@ -107,6 +107,8 @@ Feel free to open issues or submit pull-requests to help me improving my work.
 
 ### **:scroll: Release history**
 
+* 1.1.0
+    * ADD: Storage directory link
 * 1.0.0
     * First working release
 
@@ -114,7 +116,7 @@ Feel free to open issues or submit pull-requests to help me improving my work.
 
 ### **:notebook: TODO**
 
-* Storage directory link
+* ~~Storage directory link~~
 
 ---
 
